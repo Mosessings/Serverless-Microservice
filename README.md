@@ -1,4 +1,4 @@
-# LevelUp! Lab for Serverless
+# Lab for Serverless
 
 ## Lab Overview And High-Level Design
 
@@ -256,5 +256,51 @@ In this step, you deploy the API that you created to a stage called prod.
     }
 }
 ```
-2. To execute our API from local machine, we are going to use Postman and Curl command. You can choose either method based on your convenience and familiarity. 
+2. To execute our API from local machine, we are going to use Postman and Curl command. You can choose either method based on your convenience and familiarity.
+   
     * To run this from Postman, select "POST" , paste the API invoke url. Then under "Body" select "raw" and paste the above JSON. Click "Send". API should execute and return "HTTPStatusCode" 200.
+  
+![uu](https://github.com/user-attachments/assets/5aa2d11b-4e28-4c0b-a9fa-8749bb62ba9e)
+
+   * To run this from the terminal using Curl, run the below
+
+    ```
+    $ curl -X POST -d "{\"operation\":\"create\",\"tableName\":\"lambda-apigateway\",\"payload\":{\"Item\":{\"id\":\"1\",\"name\":\"Bob\"}}}" https://$API.execute-api.$REGION.amazonaws.com/prod/DynamoDBManager
+    ```   
+3. To validate that the item is indeed inserted into DynamoDB table, go to Dynamo console, select "lambda-apigateway" table, select "Items" tab, and the newly inserted item should be displayed.
+
+![z](https://github.com/user-attachments/assets/22d86f05-8fa8-4aed-98b1-1fe9bdaf45b8)
+
+4. To get all the inserted items from the table, we can use the "list" operation of Lambda using the same API. Pass the following JSON to the API, and it will return all the items from the Dynamo table
+
+```json
+{
+    "operation": "list",
+    "tableName": "lambda-apigateway",
+    "payload": {
+    }
+}
+```
+
+![zz](https://github.com/user-attachments/assets/a41239f9-5e0b-4ec6-92eb-151098af6cd9)
+
+We have successfully created a serverless API using API Gateway, Lambda, and DynamoDB!
+
+## Cleanup
+
+Let's clean up the resources we have created for this lab.
+
+
+### Cleaning up DynamoDB
+
+To delete the table, from DynamoDB console, select the table "lambda-apigateway", and click "Delete table"
+
+![v](https://github.com/user-attachments/assets/b49ed195-f0cd-48b9-81c0-d9e8c27bb583)
+
+To delete the Lambda, from the Lambda console, select lambda "LambdaFunctionOverHttps", click "Actions", then click Delete 
+
+![vv](https://github.com/user-attachments/assets/4fc371a4-0427-41a5-bdab-a0cc47638241)
+
+To delete the API we created, in API gateway console, under APIs, select "DynamoDBOperations" API, click "Actions", then "Delete"
+
+![vvv](https://github.com/user-attachments/assets/caa55575-3cb3-4dda-a53d-0301a73da821)
